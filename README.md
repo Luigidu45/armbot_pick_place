@@ -105,5 +105,3 @@ Interfaz desarrollada para la monitorización y control manual del brazo, permit
 
 ---
 
-## 📝 Autor
-**Luis Ayala** - *Diseño, Control y Percepción* - [Tu LinkedIn/GitHub]
