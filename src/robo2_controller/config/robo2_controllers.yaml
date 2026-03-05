@@ -1,0 +1,29 @@
+# robo2_controllers.yaml
+
+controller_manager:
+  ros__parameters:
+    update_rate: 10
+    arm_controller:
+      type: forward_command_controller/ForwardCommandController
+
+    gripper_controller:
+      type: forward_command_controller/ForwardCommandController
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+arm_controller:
+  ros__parameters:
+    joints:
+      - base_to_base
+      - base_to_arm
+      - base_to_arm2
+    
+    interface_name: position
+
+gripper_controller:
+  ros__parameters:
+    joints:
+      - gripper_finger_right
+    
+    interface_name: position

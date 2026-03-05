@@ -1,0 +1,18 @@
+# ROS 2 Build folders
+build/
+install/
+log/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Workspace temporary files
+.gemini/
+.vscode/
+
+# System files
+.DS_Store
+Thumbs.db

@@ -1,0 +1,155 @@
+<?xml version="1.0"?>
+<!-- robot_gazebo.xacro -->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="robo2_robot">
+    <!-- Plugin de ros2_control -->
+    <gazebo>
+        <xacro:if value="$(arg is_ignition)">
+            <plugin filename="ign_ros2_control-system" name="ign_ros2_control::IgnitionROS2ControlPlugin">
+                <parameters>$(find robo2_controller)/config/robo2_controllers.yaml</parameters>
+            </plugin>
+        </xacro:if>
+        <xacro:unless value="$(arg is_ignition)">
+            <plugin filename="gz_ros2_control-system" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
+                <parameters>$(find robo2_controller)/config/robo2_controllers.yaml</parameters>
+            </plugin>
+        </xacro:unless>
+    </gazebo>
+    
+    <!-- Plugin para publicar estados de TODAS las juntas (incluyendo mimic) -->
+    <gazebo>
+        <plugin filename="gz-sim-joint-state-publisher-system" name="gz::sim::systems::JointStatePublisher">
+            <update_rate>100</update_rate>
+        </plugin>
+    </gazebo>
+
+    <gazebo reference="base_link">
+        <visual>
+            <material>
+                <ambient>0.05 0.05 0.05 1.0</ambient>
+                <diffuse>0.05 0.05 0.05 1.0</diffuse>
+                <specular>0.1 0.1 0.1 1.0</specular> </material>
+        </visual>
+    </gazebo>
+
+    <gazebo reference="base_plate">
+        <visual>
+            <material>
+                <ambient>0.25 0.25 0.25 1.0</ambient>
+                <diffuse>0.25 0.25 0.25 1.0</diffuse>
+                <specular>0.4 0.4 0.4 1.0</specular>
+            </material>
+        </visual>
+    </gazebo>
+
+    <gazebo reference="arm1">
+        <visual>
+            <material>
+                <ambient>0.25 0.25 0.25 1.0</ambient>
+                <diffuse>0.25 0.25 0.25 1.0</diffuse>
+                <specular>0.4 0.4 0.4 1.0</specular>
+            </material>
+        </visual>
+    </gazebo>
+
+    <gazebo reference="joint_arm1_paralel1">
+        <visual>
+            <material>
+                <ambient>0.25 0.25 0.25 1.0</ambient>
+                <diffuse>0.25 0.25 0.25 1.0</diffuse>
+                <specular>0.4 0.4 0.4 1.0</specular>
+            </material>
+        </visual>
+    </gazebo>
+
+    <gazebo reference="joint_paralel2">
+        <visual>
+            <material>
+                <ambient>0.25 0.25 0.25 1.0</ambient>
+                <diffuse>0.25 0.25 0.25 1.0</diffuse>
+                <specular>0.4 0.4 0.4 1.0</specular>
+            </material>
+        </visual>
+    </gazebo>
+
+    <gazebo reference="gripper">
+        <visual>
+            <material>
+                <ambient>0.25 0.25 0.25 1.0</ambient>
+                <diffuse>0.25 0.25 0.25 1.0</diffuse>
+                <specular>0.4 0.4 0.4 1.0</specular>
+            </material>
+        </visual>
+    </gazebo>
+
+    <gazebo reference="arm2">
+        <visual>
+            <material>
+                <ambient>0.7 0.7 0.7 1.0</ambient>
+                <diffuse>0.7 0.7 0.7 1.0</diffuse>
+                <specular>0.8 0.8 0.8 1.0</specular>
+            </material>
+        </visual>
+    </gazebo>
+
+    <gazebo reference="paralel1">
+        <visual>
+            <material>
+                <ambient>0.7 0.7 0.7 1.0</ambient>
+                <diffuse>0.7 0.7 0.7 1.0</diffuse>
+                <specular>0.8 0.8 0.8 1.0</specular>
+            </material>
+        </visual>
+    </gazebo>
+
+    <gazebo reference="paralel2">
+        <visual>
+            <material>
+                <ambient>0.7 0.7 0.7 1.0</ambient>
+                <diffuse>0.7 0.7 0.7 1.0</diffuse>
+                <specular>0.8 0.8 0.8 1.0</specular>
+            </material>
+        </visual>
+    </gazebo>
+
+    <gazebo reference="link2">
+        <visual>
+            <material>
+                <ambient>0.7 0.7 0.7 1.0</ambient>
+                <diffuse>0.7 0.7 0.7 1.0</diffuse>
+                <specular>0.8 0.8 0.8 1.0</specular>
+            </material>
+        </visual>
+    </gazebo>
+
+    <gazebo reference="link3">
+        <visual>
+            <material>
+                <ambient>0.7 0.7 0.7 1.0</ambient>
+                <diffuse>0.7 0.7 0.7 1.0</diffuse>
+                <specular>0.8 0.8 0.8 1.0</specular>
+            </material>
+        </visual>
+    </gazebo>
+
+    <gazebo reference="finger_rigth">
+        <visual>
+            <material>
+                <ambient>0.1 0.1 0.1 1.0</ambient>
+                <diffuse>0.1 0.1 0.1 1.0</diffuse>
+                <specular>0.2 0.2 0.2 1.0</specular>
+            </material>
+        </visual>
+    </gazebo>
+
+    <gazebo reference="finger_left">
+        <visual>
+            <material>
+                <ambient>0.1 0.1 0.1 1.0</ambient>
+                <diffuse>0.1 0.1 0.1 1.0</diffuse>
+                <specular>0.2 0.2 0.2 1.0</specular>
+            </material>
+        </visual>
+    </gazebo>
+
+    
+</robot>

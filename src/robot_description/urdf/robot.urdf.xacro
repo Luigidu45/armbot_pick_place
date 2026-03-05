@@ -1,0 +1,314 @@
+<?xml version="1.0"?>
+<!-- robot.urdf.xacro -->
+
+<robot xmlns:xacro='http://www.ros.org/wiki/xacro' name='robo2_robot'>
+    
+    <xacro:arg name="is_ignition" default="true"/>
+
+    <xacro:include filename='$(find robot_description)/urdf/robot_gazebo.xacro'/>
+    <xacro:include filename='$(find robot_description)/urdf/robot_ros2_control.xacro'/>
+
+    <xacro:property name='PI' value='3.14159'/>
+    <xacro:property name='effort' value='30.0'/>
+    <xacro:property name='velocity' value='10.0'/>
+
+    <xacro:macro name="default_inertial" params="mass">
+        <inertial>
+            <mass value="${mass}"/>
+            <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+        </inertial> 
+    </xacro:macro>
+    
+    <link name='world'/>
+
+    <link name='base_link'>
+        <xacro:default_inertial mass="0.19450"/>
+        <visual>
+            <origin rpy="0 0 -3.45" xyz="2.257 0.09 -1.25"/>
+            <geometry>
+                <mesh filename='package://robot_description/meshes/base_v4.STL' scale='0.01 0.01 0.01'/>
+            </geometry>
+        </visual>
+        <collision>
+            <origin rpy="0 0 -3.45" xyz="2.257 0.09 -1.25"/>
+            <geometry>
+                <mesh filename='package://robot_description/meshes/base_v4.STL' scale='0.01 0.01 0.01'/>
+            </geometry>
+        </collision>
+    </link>
+
+    <joint name='virtual_joint' type='fixed'>
+        <parent link='world'/>
+        <child link='base_link'/>
+        <origin xyz='0 0 0' rpy='0 0 0'/>
+    </joint>
+    <link name='base_plate'>
+        <xacro:default_inertial mass="0.10912"/>
+        <visual>
+            <origin rpy='0 0 0' xyz='0.0 0.0 -0.25'/>
+            <geometry>
+                <mesh filename='package://robot_description/meshes/base_v2.STL' scale='0.01 0.01 0.01'/>
+            </geometry>
+        </visual>
+        <collision>
+            <origin rpy='0 0 0' xyz='0.0 0.0 -0.25'/>
+            <geometry>
+                <mesh filename='package://robot_description/meshes/base_v2.STL' scale='0.01 0.01 0.01'/>
+            </geometry>
+        </collision>
+    </link>
+    <joint name='base_to_base' type='revolute'>
+        <parent link='base_link'/>
+        <child link='base_plate'/>
+        <axis xyz='0 0 1'/>
+        <origin xyz='0 0 0.86' rpy='0 0 0'/>
+        <limit lower='-1.57' upper='1.57' effort='${effort}' velocity='${velocity}'/>
+    </joint>
+    <link name='arm1'>
+        <xacro:default_inertial mass="0.05197"/>
+        <visual>
+            <origin rpy='0 0 0.0' xyz='0.0 0.0 -0.45'/>
+            <geometry>
+                <mesh filename='package://robot_description/meshes/arm1_v3.STL' scale='0.01 0.01 0.01'/>
+            </geometry>
+        </visual>
+        <collision>
+            <origin rpy='0 0 0.0' xyz='0.0 0.0 -0.45'/>
+            <geometry>
+                <mesh filename='package://robot_description/meshes/arm1_v3.STL' scale='0.01 0.01 0.01'/>
+            </geometry>
+        </collision>
+    </link>
+    <joint name='base_to_arm' type='revolute'>
+        <parent link='base_plate'/>
+        <child link='arm1'/>
+        <axis xyz='0 1 0'/>
+        <origin xyz='0 0.136 0.64' rpy='0 0 0'/>
+        <limit lower='-1.57' upper='1.57' effort='${effort}' velocity='${velocity}'/>
+    </joint>
+    <link name='paralel1'>
+        <xacro:default_inertial mass="0.01777"/>
+        <visual>
+            <origin rpy='0 0 0.0' xyz='-0.3 0.33 -0.28'/>
+            <geometry>
+                <mesh filename='package://robot_description/meshes/paralel1.STL' scale='0.01 0.01 0.01'/>
+            </geometry>
+        </visual>
+        <collision>
+            <origin rpy='0 0 0.0' xyz='-0.3 0.33 -0.28'/>
+            <geometry>
+                <mesh filename='package://robot_description/meshes/paralel1.STL' scale='0.01 0.01 0.01'/>
+            </geometry>
+        </collision>
+    </link>
+    <joint name='base_to_paralel1' type='revolute'>
+        <parent link='base_plate'/>
+        <child link='paralel1'/>
+        <axis xyz='0 1 0'/>
+        <origin xyz='0.30 -0.19 0.76' rpy='0 0 0'/>
+        <mimic joint='base_to_arm' multiplier='1.0'/>
+        <limit lower='-1.57' upper='1.57' effort='${effort}' velocity='${velocity}'/>
+    </joint>
+    <link name='joint_arm1_paralel1'>
+        <xacro:default_inertial mass="0.01493"/>
+        <visual>
+            <origin rpy='0 0 0.0' xyz='-0.05 0.0 -1.5'/>
+            <geometry>
+                <mesh filename='package://robot_description/meshes/joint_arm1_paralel1.STL' scale='0.01 0.01 0.01'/>
+            </geometry>
+        </visual>
+        <collision>
+            <origin rpy='0 0 0.0' xyz='-0.05 0.0 -1.5'/>
+            <geometry>
+                <mesh filename='package://robot_description/meshes/joint_arm1_paralel1.STL' scale='0.01 0.01 0.01'/>
+            </geometry>
+        </collision>
+    </link>
+    <joint name='virtual_joint_v2' type='revolute'>
+        <parent link='arm1'/>
+        <child link='joint_arm1_paralel1'/>
+        <origin xyz='0.05 0.03 1.36' rpy='0 0 0'/>
+        <axis xyz='0 1 0'/>
+        <mimic joint='base_to_arm' multiplier='-1.0'/>
+        <limit lower='-1.57' upper='1.57' effort='${effort}' velocity='${velocity}'/>
+    </joint>
+    <link name='arm2'>
+        <xacro:default_inertial mass="0.02123"/>
+        <visual>
+            <origin rpy='0 0 0.0' xyz='0.0 0.0 -0.3'/>
+            <geometry>
+                <mesh filename='package://robot_description/meshes/arm2.STL' scale='0.01 0.01 0.01'/>
+            </geometry>
+        </visual>
+        <collision>
+            <origin rpy='0 0 0.0' xyz='0.0 0.0 -0.3'/>
+            <geometry>
+                <mesh filename='package://robot_description/meshes/arm2.STL' scale='0.01 0.01 0.01'/>
+            </geometry>
+        </collision>
+    </link>
+    <joint name='base_to_arm2' type='revolute'>
+        <parent link='base_plate'/>
+        <child link='arm2'/>
+        <axis xyz='0 1 0'/>
+        <origin xyz='0 -0.05 0.64' rpy='0 0 0'/>
+        <limit lower='-1.57' upper='1.57' effort='${effort}' velocity='${velocity}'/>
+    </joint>
+    <link name='link2'>
+        <xacro:default_inertial mass="0.00867"/>
+        <visual>
+            <origin rpy='0 0.22 0.0' xyz='-0.4 0.0 0.0'/>
+            <geometry>
+                <mesh filename='package://robot_description/meshes/link2_NO.STL' scale='0.01 0.01 0.01'/>
+            </geometry>
+        </visual>
+        <collision>
+            <origin rpy='0 0.22 0.0' xyz='-0.4 0.0 0.0'/>
+            <geometry>
+                <mesh filename='package://robot_description/meshes/link2_NO.STL' scale='0.01 0.01 0.01'/>
+            </geometry>
+        </collision>
+    </link>
+    <joint name='arm2_to_link2' type='revolute'>
+        <parent link='arm2'/>
+        <child link='link2'/>
+        <axis xyz='0 1 0'/>
+        <origin xyz='0.4 0.02 0.084' rpy='0 0 0'/>   
+        <mimic joint='base_to_arm2' multiplier='-1.0'/>
+        <limit lower='-1.57' upper='1.57' effort='${effort}' velocity='${velocity}'/>
+    </joint>
+    <link name='link3'>
+        <xacro:default_inertial mass="0.02637"/>
+        <visual>
+            <origin rpy='0.0 0.2 0.0' xyz='-0.05 -0.23 -1.40'/>
+            <geometry>
+                <mesh filename='package://robot_description/meshes/link3.STL' scale='0.01 0.01 0.01'/>
+            </geometry>
+        </visual>
+        <collision>
+            <origin rpy='0.0 0.2 0.0' xyz='-0.05 -0.23 -1.40'/>
+            <geometry>
+                <mesh filename='package://robot_description/meshes/link3.STL' scale='0.01 0.01 0.01'/>
+            </geometry>
+        </collision>
+    </link>
+    <joint name='arm1_to_link3' type='revolute'>
+        <parent link='joint_arm1_paralel1'/>
+        <child link='link3'/>
+        <axis xyz='0 1 0'/>
+        <origin xyz='0.0 0.05 0.05' rpy='0 0 0'/>   
+        <mimic joint='base_to_arm2' multiplier='1.0'/>
+        <limit lower='-1.57' upper='1.57' effort='${effort}' velocity='${velocity}'/>
+    </joint>
+    <link name='paralel2'>
+        <xacro:default_inertial mass="0.01777"/>
+        <visual>
+            <origin rpy='0.0 0.0 0.0' xyz='0.14 -0.16 -2.22'/>
+            <geometry>
+                <mesh filename='package://robot_description/meshes/paralel2.STL' scale='0.01 0.01 0.01'/>
+            </geometry>
+        </visual>
+        <collision>
+            <origin rpy='0.0 0.0 0.0' xyz='0.14 -0.16 -2.22'/>
+            <geometry>
+                <mesh filename='package://robot_description/meshes/paralel2.STL' scale='0.01 0.01 0.01'/>
+            </geometry>
+        </collision>
+    </link>
+    <joint name='arm1_to_paralel2' type='revolute'>
+        <parent link='joint_arm1_paralel1'/>
+        <child link='paralel2'/>
+        <axis xyz='0 1 0'/>
+        <origin xyz='-0.14 0.05 0.23' rpy='0 0 0'/>   
+        <mimic joint='base_to_arm2' multiplier='1.0'/>
+        <limit lower='-1.57' upper='1.57' effort='${effort}' velocity='${velocity}'/>
+    </joint>
+    <link name='joint_paralel2'>
+        <xacro:default_inertial mass="0.01861"/>
+        <visual>
+            <origin rpy='0.0 0.0 0.0' xyz='1.46 -0.16 -2.18'/>
+            <geometry>
+                <mesh filename='package://robot_description/meshes/joint_paralel2.STL' scale='0.01 0.01 0.01'/>
+            </geometry>
+        </visual>
+        <collision>
+            <origin rpy='0.0 0.0 0.0' xyz='1.46 -0.16 -2.18'/>
+            <geometry>
+                <mesh filename='package://robot_description/meshes/joint_paralel2.STL' scale='0.01 0.01 0.01'/>
+            </geometry>
+        </collision>
+    </link>
+    <joint name='paralel2_to_joint_paralel2' type='revolute'>
+        <parent link='paralel2'/>
+        <child link='joint_paralel2'/>
+        <axis xyz='0 1 0'/>
+        <origin xyz='-1.35 0.05 0.0' rpy='0 0 0'/>   
+        <mimic joint='arm1_to_paralel2' multiplier='-1.0'/>
+        <limit lower='-1.57' upper='1.57' effort='${effort}' velocity='${velocity}'/>
+    </joint>
+    <link name='gripper'>
+        <xacro:default_inertial mass="0.05659"/>
+        <visual>
+            <origin rpy='0.0 0.0 0.0' xyz='1.46 -0.16 -2.18'/>
+            <geometry>
+                <mesh filename='package://robot_description/meshes/gripper.STL' scale='0.01 0.01 0.01'/>
+            </geometry>
+        </visual>
+        <collision>
+            <origin rpy='0.0 0.0 0.0' xyz='1.46 -0.16 -2.18'/>
+            <geometry>
+                <mesh filename='package://robot_description/meshes/gripper.STL' scale='0.01 0.01 0.01'/>
+            </geometry>
+        </collision>
+    </link>
+    <joint name='joint2_gripper' type='fixed'>
+        <parent link='joint_paralel2'/>
+        <child link='gripper'/>
+        <origin xyz='0.0 0.0 -0.065' rpy='0 0 0'/>  
+    </joint>
+    <link name='finger_rigth'>
+        <xacro:default_inertial mass="0.00693"/>
+        <visual>
+            <origin rpy='0.0 0.0 0.0' xyz='1.85 0.25 -1.55'/>
+            <geometry>
+                <mesh filename='package://robot_description/meshes/finger_rigth.STL' scale='0.01 0.01 0.01'/>
+            </geometry>
+        </visual>
+        <collision>
+            <origin rpy='0.0 0.0 0.0' xyz='1.85 0.25 -1.55'/>
+            <geometry>
+                <mesh filename='package://robot_description/meshes/finger_rigth.STL' scale='0.01 0.01 0.01'/>
+            </geometry>
+        </collision>
+    </link>
+    <joint name='gripper_finger_right' type='prismatic'>
+        <parent link='gripper'/>
+        <child link='finger_rigth'/>
+        <axis xyz='0 1 0'/>
+        <origin xyz='-0.4 -0.4 -0.6' rpy='0 0 0'/>   
+        <limit lower='0.0' upper='0.195' effort='${effort}' velocity='${velocity}'/>
+    </joint>
+    <link name='finger_left'>
+        <xacro:default_inertial mass="0.00693"/>
+        <visual>
+            <origin rpy='0.0 0.0 0.0' xyz='1.85 -0.25 -1.55'/>
+            <geometry>
+                <mesh filename='package://robot_description/meshes/finger_left.STL' scale='0.01 0.01 0.01'/>
+            </geometry>
+        </visual>
+        <collision>
+            <origin rpy='0.0 0.0 0.0' xyz='1.85 -0.25 -1.55'/>
+            <geometry>
+                <mesh filename='package://robot_description/meshes/finger_left.STL' scale='0.01 0.01 0.01'/>
+            </geometry>
+        </collision>
+    </link>
+    <joint name='gripper_finger_left' type='prismatic'>
+        <parent link='gripper'/>
+        <child link='finger_left'/>
+        <axis xyz='0 1 0'/>
+        <origin xyz='-0.4 0.1 -0.6' rpy='0 0 0'/>   
+        <mimic joint='gripper_finger_right' multiplier='-1.0'/>
+        <limit lower='-1.57' upper='1.57' effort='${effort}' velocity='${velocity}'/>
+    </joint>
+</robot>
