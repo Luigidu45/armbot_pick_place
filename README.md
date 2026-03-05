@@ -1,5 +1,10 @@
 # VIPER: Robotic Arm for Electronic Waste (E-Waste) Classification
 
+![ROS2 Jazzy](https://img.shields.io/badge/ROS2-Jazzy-blue?style=flat-square&logo=ros)
+![Python](https://img.shields.io/badge/Python-3.12-3776AB?style=flat-square&logo=python&logoColor=white)
+![Gazebo Harmonic](https://img.shields.io/badge/Gazebo-Harmonic-orange?style=flat-square&logo=gazebo&logoColor=white)
+![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)
+
 VIPER is a robotic ecosystem developed in **ROS 2 Jazzy**, designed for automated *Pick and Place* tasks. The project integrates advanced mechanical design, a high-fidelity simulation acting as a digital twin, and a perception system based on **YOLOv11** specifically trained for the detection and classification of electronic components.
 
 <div align="center">
