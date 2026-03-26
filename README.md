@@ -5,7 +5,7 @@
 ![Gazebo Harmonic](https://img.shields.io/badge/Gazebo-Harmonic-orange?style=flat-square&logo=gazebo&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)
 
-VIPER is a robotic ecosystem developed in **ROS 2 Jazzy**, designed for automated *Pick and Place* tasks. The project integrates advanced mechanical design, a high-fidelity simulation acting as a digital twin, and a perception system based on **YOLOv11** specifically trained for the detection and classification of electronic components.
+VIPER is a robotic ecosystem prueba developed in **ROS 2 Jazzy**, designed for automated *Pick and Place* tasks. The project integrates advanced mechanical design, a high-fidelity simulation acting as a digital twin, and a perception system based on **YOLOv11** specifically trained for the detection and classification of electronic components.
 
 <div align="center">
   <img src="docs/media/demo_1.gif" width="48%" />
